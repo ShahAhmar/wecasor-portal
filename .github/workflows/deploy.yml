@@ -40,6 +40,8 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_DIRECTORY }}
+          # Timeout ko barha dete hain (ms mein)
+          timeout: 90000
           exclude: |
             **/.git*
             **/.git*/**
