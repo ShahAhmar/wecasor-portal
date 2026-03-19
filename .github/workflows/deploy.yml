@@ -1,4 +1,4 @@
-name: Build and Deploy to cPanel
+name: Build and Deploy to cPanel (via SSH/rsync)
 
 on:
   push:
@@ -33,22 +33,14 @@ jobs:
           npm install --legacy-peer-deps
           npm run build
 
-      - name: 📂 Sync files to cPanel
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: 📂 Deploy to Server via SSH (rsync)
+        uses: easingthemes/ssh-deploy@v5.1.0
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_DIRECTORY }}
-          port: 21
-          timeout: 120000
-          # Force passive mode to bypass firewalls
-          # Note: This action uses passive mode by default, but let's ensure settings are clean.
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/tests/**
-            **/.env
-            **/storage/*.key
-            **/vendor/
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          TARGET: ${{ secrets.SSH_TARGET }}
+          EXCLUDE: "/.git/, /.github/, /node_modules/, /tests/, /.env, /storage/*.key, /vendor/"
+          ARGS: "-rlgoDzvc -i --delete"
+          SCRIPT_AFTER: |
+            echo "Deployment finished successfully!"
