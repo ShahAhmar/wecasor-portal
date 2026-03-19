@@ -41,7 +41,9 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_DIRECTORY }}
           port: 21
-          timeout: 90000
+          timeout: 120000
+          # Force passive mode to bypass firewalls
+          # Note: This action uses passive mode by default, but let's ensure settings are clean.
           exclude: |
             **/.git*
             **/.git*/**
@@ -49,5 +51,4 @@ jobs:
             **/tests/**
             **/.env
             **/storage/*.key
-            # Hum vendor folder ko bhi sync karein ge taake dependecies up-to-date rahain.
-            # Agar first time deployment bohat slow ho toh aap manual upload bhi kar saktay hain.
+            **/vendor/
