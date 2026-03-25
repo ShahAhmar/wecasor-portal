@@ -126,7 +126,7 @@ export default function Show({ user, roles, institutions, mode }) {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">{mode === 'create' ? 'Security Cipher' : 'Revise Cipher (Optional)'}</label>
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">{mode === 'create' ? 'Security Password' : 'Revise Password (Optional)'}</label>
                                 <input 
                                     type="password" 
                                     value={data.password}

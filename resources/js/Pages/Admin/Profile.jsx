@@ -130,7 +130,7 @@ export default function Profile({ user, userLogs }) {
                         <section className="bg-slate-900 p-10 rounded-[3rem] border border-slate-800">
                              <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4">Governance Notice</h4>
                              <p className="text-[10px] text-slate-400 font-bold leading-relaxed italic tracking-wide">
-                                All profile modifications are subject to systemic monitoring. Failure to maintain secure cipher protocols may result in conditional account suspension.
+                                All profile modifications are subject to systemic monitoring. Failure to maintain secure password protocols may result in conditional account suspension.
                              </p>
                         </section>
                     </div>

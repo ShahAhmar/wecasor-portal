@@ -20,6 +20,12 @@ Route::post('/admin/login', [AuthController::class, 'adminLogin']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Password Reset Routes
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.store');
+
 Route::prefix('admin')->middleware(['auth', '2fa'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('studies', StudyController::class);
