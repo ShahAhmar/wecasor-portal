@@ -42,6 +42,7 @@ Route::prefix('admin')->middleware(['auth', '2fa'])->group(function () {
 
     // 2FA Routes
     Route::get('/2fa/setup', [TwoFactorController::class, 'setup'])->name('admin.2fa.setup')->withoutMiddleware(['2fa']);
+    Route::post('/2fa/send', [TwoFactorController::class, 'sendOtp'])->name('admin.2fa.send')->withoutMiddleware(['2fa']);
     Route::post('/2fa/confirm', [TwoFactorController::class, 'confirm'])->name('admin.2fa.confirm')->withoutMiddleware(['2fa']);
     Route::get('/2fa/challenge', [TwoFactorController::class, 'showChallenge'])->name('admin.2fa.challenge')->withoutMiddleware(['2fa']);
     Route::post('/2fa/verify', [TwoFactorController::class, 'verify'])->name('admin.2fa.verify')->withoutMiddleware(['2fa']);

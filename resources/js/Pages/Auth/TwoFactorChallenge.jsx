@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Head, useForm, Link } from '@inertiajs/react';
 
-export default function TwoFactorChallenge() {
+export default function TwoFactorChallenge({ email }) {
     const { data, setData, post, processing, errors } = useForm({
         code: '',
     });
@@ -9,6 +9,11 @@ export default function TwoFactorChallenge() {
     const submit = (e) => {
         e.preventDefault();
         post(route('admin.2fa.verify'));
+    };
+
+    const resendCode = (e) => {
+        e.preventDefault();
+        post(route('admin.2fa.send'));
     };
 
     return (
@@ -28,11 +33,17 @@ export default function TwoFactorChallenge() {
                 
                 <div className="bg-white/95 backdrop-blur-xl py-10 px-8 shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[2.5rem] border border-white/20">
                     <div className="mb-8 text-center">
-                        <h2 className="text-2xl font-black text-slate-800 tracking-tight uppercase">2FA Verification</h2>
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-50 rounded-2xl mb-4">
+                            <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002 -2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h2 className="text-2xl font-black text-slate-800 tracking-tight uppercase">Enter OTP</h2>
                         <div className="h-1 w-12 bg-emerald-500 mx-auto mt-3 rounded-full"></div>
                         <p className="mt-4 text-sm font-bold text-slate-500 leading-relaxed">
-                            Please enter the 6-digit verification code from your authenticator app to continue.
+                            A verification code has been sent to your registered email address:
                         </p>
+                        <p className="mt-1 text-sm font-black text-slate-800">{email}</p>
                     </div>
 
                     <form onSubmit={submit} className="space-y-6">
@@ -63,6 +74,17 @@ export default function TwoFactorChallenge() {
                                 className="w-full flex justify-center py-5 px-4 border border-transparent rounded-2xl shadow-xl text-sm font-black uppercase tracking-[0.2em] text-white bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all transform active:scale-[0.98] disabled:opacity-70"
                             >
                                 {processing ? 'Verifying...' : 'Verify Access'}
+                            </button>
+                        </div>
+
+                        <div className="text-center">
+                            <button
+                                type="button"
+                                onClick={resendCode}
+                                disabled={processing}
+                                className="text-xs font-black text-emerald-600 hover:text-emerald-700 uppercase tracking-widest disabled:opacity-50"
+                            >
+                                Resend verification code
                             </button>
                         </div>
                     </form>
