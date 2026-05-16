@@ -15,7 +15,20 @@ Route::get('/', function () {
 Route::get('/run-migrations-secret', function() {
     try {
         Artisan::call('migrate', ['--force' => true]);
-        return '<pre>' . Artisan::output() . '</pre>';
+        
+        // Ensure roles exist
+        Artisan::call('db:seed', ['--class' => 'RoleAndPermissionSeeder', '--force' => true]);
+        
+        // Assign Super Admin role to the specific user
+        $user = \App\Models\User::where('email', 'shahahmar882@gmail.com')->first();
+        if ($user) {
+            $user->role = 'Super Admin';
+            $user->save();
+            $user->assignRole('Super Admin');
+            return '<pre>Migration and Role Assignment Successful for ' . $user->email . '</pre>';
+        }
+        
+        return '<pre>Migration successful, but user shahahmar882@gmail.com not found.</pre>';
     } catch (\Exception $e) {
         return $e->getMessage();
     }
