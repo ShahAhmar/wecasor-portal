@@ -45,18 +45,18 @@ class DocumentController extends Controller implements HasMiddleware
         }
 
         // 1. Role-based Category Filtering (Restrict sensitive docs for non-admins)
-        if ($user->role !== 'Administrator' && $user->role !== 'Governance Member') {
+        if (!$user->hasRole(['Super Admin', 'PI / Reviewer'])) {
             $query->whereHas('category', function ($q) {
                 $q->whereNotIn('name', ['Governance Reports', 'DSMB Reports', 'Conflict of Interest (COI)', 'Meeting Minutes']);
             });
         }
 
         // 2. Institution-based Data Isolation
-        if (in_array($user->role, ['Site Investigator', 'Data Abstractor'])) {
+        if ($user->hasRole(['Site Coordinator', 'Monitor / Auditor'])) {
             $query->whereHas('study.institutions', function ($q) use ($user) {
-                $q->where('institutions.id', $user->institution_id);
+                $q->where('institutions.id', $user->site_id);
             });
-        } elseif ($user->role === 'Country Coordinator') {
+        } elseif ($user->hasRole('Country Lead')) {
             $query->whereHas('study.institutions', function ($q) use ($user) {
                 $q->where('institutions.country', $user->country);
             });
@@ -67,8 +67,8 @@ class DocumentController extends Controller implements HasMiddleware
         $categories = \App\Models\DocumentCategory::all();
 
         // Filter available categories for sidebar/select based on role
-        if ($user->role !== 'Administrator' && $user->role !== 'Governance Member') {
-            $categories = $categories->whereNotIn('name', ['Governance Reports', 'DSMB Reports', 'Conflict of Interest (COI)', 'Meeting Minutes']);
+        if (!$user->hasRole(['Super Admin', 'PI / Reviewer'])) {
+            $categories = $categories->whereNotIn('name', ['Governance Reports', 'DSMB Reports', 'Conflict of Interest (COI)', 'Meeting Minutes'])->values();
         }
 
         return Inertia::render('Admin/Documents/Index', [
@@ -122,6 +122,42 @@ class DocumentController extends Controller implements HasMiddleware
         return redirect()->route('documents.index');
     }
 
+    public function storePolymorphic(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'file' => 'required|file|max:10240',
+            'documentable_id' => 'required|uuid',
+            'documentable_type' => 'required|string',
+            'version' => 'nullable|string',
+            'expiry_date' => 'nullable|date',
+        ]);
+
+        $file = $request->file('file');
+        
+        $path = $file->storeAs(
+            "vault/" . str_replace('\\', '_', $request->documentable_type) . "/{$request->documentable_id}",
+            time() . '_' . $file->getClientOriginalName(),
+            'private'
+        );
+
+        Document::create([
+            'title' => $request->title,
+            'file_path' => $path,
+            'documentable_id' => $request->documentable_id,
+            'documentable_type' => $request->documentable_type,
+            'version' => $request->version ?? '1.0',
+            'expiry_date' => $request->expiry_date,
+            'uploaded_by' => auth()->id(),
+            'file_size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'type' => 'vault_upload',
+            'status' => 'uploaded'
+        ]);
+
+        return redirect()->back();
+    }
+
     public function download(Document $document)
     {
         if (!Storage::disk('private')->exists($document->file_path)) {
@@ -140,7 +176,14 @@ class DocumentController extends Controller implements HasMiddleware
             'ip_address' => request()->ip(),
         ]);
 
-        return Storage::disk('private')->download($document->file_path, $document->title);
+        $extension = pathinfo($document->file_path, PATHINFO_EXTENSION);
+        $downloadName = $document->title;
+        
+        if ($extension && !str_ends_with(strtolower($downloadName), strtolower('.' . $extension))) {
+            $downloadName .= '.' . $extension;
+        }
+
+        return Storage::disk('private')->download($document->file_path, $downloadName);
     }
 
     public function destroy(Document $document)

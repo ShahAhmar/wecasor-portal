@@ -23,6 +23,8 @@ class Study extends Model
         'pi_name',
         'country_coverage',
         'target_enrollment',
+        'lead_pi_id',
+        'lock_status',
         'expected_follow_up',
     ];
 
@@ -45,6 +47,16 @@ class Study extends Model
     public function institutions()
     {
         return $this->belongsToMany(Institution::class, 'ethics_applications')->distinct();
+    }
+
+    public function sites()
+    {
+        return $this->institutions();
+    }
+
+    public function subjects()
+    {
+        return $this->hasMany(Subject::class);
     }
 
     public function ethicsApplications()

@@ -15,71 +15,69 @@ class RoleAndPermissionSeeder extends Seeder
 
         // Create Permissions
         $permissions = [
+            'manage studies',
+            'manage sites',
             'manage users',
-            'view audit logs',
-            'view all sites',
-            'view aggregated data',
-            'approve publications',
             'manage documents',
-            'view governance docs',
-            'view reports',
-            'submit data',
+            'enter data',
+            'review data',
+            'raise queries',
             'manage queries',
-            'view own site',
-            'edit own site',
-            'manage institutions',
+            'view full portfolio',
+            'view country portfolio',
+            'view assigned studies',
+            'view site',
         ];
 
         foreach ($permissions as $permission) {
             Permission::updateOrCreate(['name' => $permission]);
         }
 
-        // 1. Administrator: Full system access
-        $admin = Role::updateOrCreate(['name' => 'Administrator']);
-        $admin->syncPermissions(Permission::all());
+        // 1. Super Admin
+        $superAdmin = Role::updateOrCreate(['name' => 'Super Admin']);
+        $superAdmin->syncPermissions(Permission::all());
 
-        // 2. Governance Member: Aggregate data, DSMB reports, Publication committee
-        $governance = Role::updateOrCreate(['name' => 'Governance Member']);
-        $governance->syncPermissions([
-            'view aggregated data', 
-            'view governance docs', 
-            'view reports', 
-            'approve publications', 
-            'view audit logs'
+        // 2. Study Admin
+        $studyAdmin = Role::updateOrCreate(['name' => 'Study Admin']);
+        $studyAdmin->syncPermissions([
+            'manage documents',
+            'manage sites',
+            'manage queries',
+            'view assigned studies'
         ]);
 
-        // 3. Country Coordinator: Country-level aggregation, training, site support
-        $coordinator = Role::updateOrCreate(['name' => 'Country Coordinator']);
-        $coordinator->syncPermissions([
-            'view all sites', 
-            'manage documents', 
-            'view reports', 
-            'manage queries'
+        // 3. Country Lead
+        $countryLead = Role::updateOrCreate(['name' => 'Country Lead']);
+        $countryLead->syncPermissions([
+            'view country portfolio',
+            'view site',
+            'manage queries' // escalating queries
         ]);
 
-        // 4. Site Investigator (PI): Manage site team and data
-        $pi = Role::updateOrCreate(['name' => 'Site Investigator']);
-        $pi->syncPermissions([
-            'view own site', 
-            'edit own site', 
-            'submit data', 
-            'manage documents', 
-            'manage queries', 
-            'view reports'
+        // 4. Site Coordinator
+        $siteCoordinator = Role::updateOrCreate(['name' => 'Site Coordinator']);
+        $siteCoordinator->syncPermissions([
+            'view site',
+            'enter data',
+            'manage documents',
+            'manage queries' // answering queries
         ]);
 
-        // 5. Data Abstractor: Purely data entry at site level
-        $abstractor = Role::updateOrCreate(['name' => 'Data Abstractor']);
-        $abstractor->syncPermissions([
-            'submit data', 
-            'view own site', 
-            'manage queries'
+        // 5. Monitor / Auditor
+        $monitorAudit = Role::updateOrCreate(['name' => 'Monitor / Auditor']);
+        $monitorAudit->syncPermissions([
+            'view site',
+            'review data',
+            'raise queries',
+            'view assigned studies'
         ]);
 
-        // 6. Viewer (Restricted): Read-only dashboards and specific documents
-        $viewer = Role::updateOrCreate(['name' => 'Viewer']);
-        $viewer->syncPermissions([
-            'view reports'
+        // 6. PI / Reviewer
+        $piReviewer = Role::updateOrCreate(['name' => 'PI / Reviewer']);
+        $piReviewer->syncPermissions([
+            'view site',
+            'review data',
+            'manage documents'
         ]);
     }
 }

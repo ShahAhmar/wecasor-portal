@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('institution')->latest()->get();
+        $users = User::with(['site', 'roles'])->latest()->get();
         return Inertia::render('Admin/Users/Index', [
             'users' => $users
         ]);
@@ -45,17 +45,17 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'required|exists:roles,name',
-            'institution_id' => 'nullable|exists:institutions,id',
+            'site_id' => 'nullable|exists:sites,id',
             'status' => 'required|in:Active,Inactive,Pending',
         ]);
 
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
+            'name' => $validated['name'] ?? '',
+            'email' => $validated['email'] ?? '',
             'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
-            'institution_id' => $validated['institution_id'],
-            'status' => $validated['status'],
+            'role' => $validated['role'] ?? 'Staff',
+            'site_id' => $validated['site_id'] ?? null,
+            'status' => $validated['status'] ?? 'Active',
         ]);
 
         $user->assignRole($validated['role']);
@@ -81,16 +81,16 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'role' => 'required|exists:roles,name',
-            'institution_id' => 'nullable|exists:institutions,id',
+            'site_id' => 'nullable|exists:sites,id',
             'status' => 'required|in:Active,Inactive,Pending',
         ]);
 
         $user->update([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'role' => $validated['role'],
-            'institution_id' => $validated['institution_id'],
-            'status' => $validated['status'],
+            'name' => $validated['name'] ?? $user->name,
+            'email' => $validated['email'] ?? $user->email,
+            'role' => $validated['role'] ?? $user->role,
+            'site_id' => $validated['site_id'] ?? null,
+            'status' => $validated['status'] ?? $user->status,
         ]);
 
         if ($request->filled('password')) {

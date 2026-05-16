@@ -66,7 +66,7 @@ export default function Index({ users }) {
                                         </td>
                                         <td className="px-6 py-6">
                                             <span className="px-4 py-1.5 bg-blue-50 text-[#002d5b] rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-100/50">
-                                                {user.role}
+                                                {user.roles && user.roles.length > 0 ? user.roles[0].name : 'Investigator'}
                                             </span>
                                         </td>
                                         <td className="px-6 py-6 font-bold text-slate-600 text-sm">

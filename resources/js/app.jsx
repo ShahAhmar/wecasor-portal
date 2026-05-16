@@ -8,7 +8,7 @@ import { route } from 'ziggy-js';
 
 window.route = route;
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'WeCASOR Portal';
+const appName = 'WeCASOR';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

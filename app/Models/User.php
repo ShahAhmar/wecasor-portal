@@ -27,8 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
-        'institution_id',
+        'site_id',
         'country',
         'status',
         'phone',
@@ -63,9 +62,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function institution()
+    public function site()
     {
-        return $this->belongsTo(Institution::class);
+        return $this->belongsTo(Institution::class, 'site_id');
     }
 
     public function documents()

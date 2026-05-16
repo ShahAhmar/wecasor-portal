@@ -63,12 +63,14 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // Role Separation Logic
-            if ($isAdminPortal && $user->role !== 'Administrator') {
+            $adminRoles = ['Administrator', 'Super Admin'];
+            
+            if ($isAdminPortal && !in_array($user->role, $adminRoles)) {
                 Auth::logout();
-                return back()->withErrors(['email' => 'Access denied. You do not have administrator privileges.']);
+                return back()->withErrors(['email' => 'ACCESS DENIED. YOU DO NOT HAVE ADMINISTRATOR PRIVILEGES.']);
             }
 
-            if (!$isAdminPortal && $user->role === 'Administrator') {
+            if (!$isAdminPortal && in_array($user->role, $adminRoles)) {
                 Auth::logout();
                 return back()->withErrors(['email' => 'Administrators must use the dedicated portal.']);
             }

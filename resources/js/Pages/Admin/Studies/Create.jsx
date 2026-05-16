@@ -2,7 +2,7 @@ import React from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, Link } from '@inertiajs/react';
 
-export default function Create() {
+export default function Create({ investigators }) {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
         study_code: '',
@@ -88,12 +88,16 @@ export default function Create() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-2">
                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Lead PI Name</label>
-                                <input 
-                                    type="text" 
+                                <select 
                                     value={data.pi_name}
                                     onChange={e => setData('pi_name', e.target.value)}
                                     className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-[#002d5b] transition-all"
-                                />
+                                >
+                                    <option value="">-- Select Investigator --</option>
+                                    {investigators && investigators.map(inv => (
+                                        <option key={inv.id} value={inv.name}>{inv.name}</option>
+                                    ))}
+                                </select>
                             </div>
 
                             <div className="space-y-2">

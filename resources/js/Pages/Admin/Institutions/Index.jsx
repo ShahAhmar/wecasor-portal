@@ -92,7 +92,7 @@ export default function Index({ institutions }) {
                             </div>
 
                             <div className="flex gap-4 relative z-10">
-                                <Link href={`/admin/institutions/${item.id}`} className="flex-1 text-center py-4 bg-slate-50 text-slate-700 hover:bg-[#002d5b] hover:text-white rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.2em] transition-all border border-slate-100">View Profile</Link>
+                                <Link href={`/admin/institutions/${item.id}/workspace`} className="flex-1 text-center py-4 bg-slate-50 text-slate-700 hover:bg-[#002d5b] hover:text-white rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.2em] transition-all border border-slate-100">View Profile</Link>
                                 <Link href={`/admin/institutions/${item.id}/edit`} className="p-4 text-slate-400 hover:text-blue-600 hover:bg-blue-50 border border-slate-100 rounded-[1.5rem] transition-all">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </Link>

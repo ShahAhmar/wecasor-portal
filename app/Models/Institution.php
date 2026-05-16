@@ -13,6 +13,8 @@ class Institution extends Model
 {
     use HasFactory, HasUuids, SoftDeletes, LogsActivity;
 
+    protected $table = 'sites';
+
     protected $fillable = [
         'name',
         'country',
@@ -23,11 +25,13 @@ class Institution extends Model
         'phone',
         'website',
         'status',
+        'site_code',
+        'facility',
     ];
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'site_id');
     }
 
     public function studies()
@@ -45,5 +49,10 @@ class Institution extends Model
     public function ethicsApplications()
     {
         return $this->hasMany(EthicsApplication::class);
+    }
+
+    public function documents()
+    {
+        return $this->morphMany(Document::class, 'documentable');
     }
 }

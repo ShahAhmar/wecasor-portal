@@ -14,7 +14,7 @@ class StudyController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:Administrator', except: ['index', 'show']),
+            new Middleware('role:Super Admin|Study Admin', except: ['index', 'show']),
         ];
     }
     public function index()
@@ -27,7 +27,10 @@ class StudyController extends Controller implements HasMiddleware
 
     public function create()
     {
-        return Inertia::render('Admin/Studies/Create');
+        $investigators = \App\Models\User::orderBy('name')->get(['id', 'name']);
+        return Inertia::render('Admin/Studies/Create', [
+            'investigators' => $investigators
+        ]);
     }
 
     public function store(Request $request)
@@ -42,6 +45,7 @@ class StudyController extends Controller implements HasMiddleware
             'pi_name' => 'nullable|string|max:255',
             'target_enrollment' => 'required|integer|min:1',
             'expected_follow_up' => 'required|integer|min:1',
+            'lock_status' => 'required|string|in:open,soft_lock,hard_lock',
         ]);
 
         Study::create($validated);
@@ -70,8 +74,10 @@ class StudyController extends Controller implements HasMiddleware
 
     public function edit(Study $study)
     {
+        $investigators = \App\Models\User::orderBy('name')->get(['id', 'name']);
         return Inertia::render('Admin/Studies/Edit', [
             'study' => $study,
+            'investigators' => $investigators,
         ]);
     }
 
@@ -87,6 +93,7 @@ class StudyController extends Controller implements HasMiddleware
             'pi_name' => 'nullable|string|max:255',
             'target_enrollment' => 'required|integer|min:1',
             'expected_follow_up' => 'required|integer|min:1',
+            'lock_status' => 'required|string|in:open,soft_lock,hard_lock',
         ]);
 
         $study->update($validated);

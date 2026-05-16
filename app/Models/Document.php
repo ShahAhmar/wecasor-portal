@@ -15,23 +15,30 @@ class Document extends Model
 
     protected $fillable = [
         'title',
+        'type',
         'file_path',
-        'study_id',
+        'documentable_id',
+        'documentable_type',
         'document_category_id',
         'uploaded_by',
         'file_size',
         'mime_type',
         'status',
+        'version',
+        'is_expired',
+        'expiry_date',
+        'role_permissions'
     ];
 
-    public function uploader()
-    {
-        return $this->belongsTo(User::class, 'uploaded_by');
-    }
+    protected $casts = [
+        'role_permissions' => 'array',
+        'is_expired' => 'boolean',
+        'expiry_date' => 'datetime',
+    ];
 
-    public function category()
+    public function documentable()
     {
-        return $this->belongsTo(DocumentCategory::class, 'document_category_id');
+        return $this->morphTo();
     }
 
     public function study()
@@ -39,7 +46,12 @@ class Document extends Model
         return $this->belongsTo(Study::class);
     }
 
-    public function documentCategory()
+    public function uploader()
+    {
+        return $this->belongsTo(User::class, 'uploaded_by');
+    }
+
+    public function category()
     {
         return $this->belongsTo(DocumentCategory::class, 'document_category_id');
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, Link } from '@inertiajs/react';
 
-export default function Edit({ study }) {
+export default function Edit({ study, investigators }) {
     const { data, setData, put, processing, errors } = useForm({
         title: study.title || '',
         study_code: study.study_code || '',
@@ -13,6 +13,7 @@ export default function Edit({ study }) {
         pi_name: study.pi_name || '',
         target_enrollment: study.target_enrollment || 100,
         expected_follow_up: study.expected_follow_up || 90,
+        lock_status: study.lock_status || 'open',
     });
 
     const submit = (e) => {
@@ -85,12 +86,16 @@ export default function Edit({ study }) {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-2">
                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Lead PI Name</label>
-                                <input 
-                                    type="text" 
+                                <select 
                                     value={data.pi_name}
                                     onChange={e => setData('pi_name', e.target.value)}
                                     className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-[#002d5b] transition-all"
-                                />
+                                >
+                                    <option value="">-- Select Investigator --</option>
+                                    {investigators && investigators.map(inv => (
+                                        <option key={inv.id} value={inv.name}>{inv.name}</option>
+                                    ))}
+                                </select>
                             </div>
 
                             <div className="space-y-2">
@@ -102,6 +107,32 @@ export default function Edit({ study }) {
                                     className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-[#002d5b] transition-all"
                                 />
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Form Section: Lock & Governance */}
+                    <div className="bg-white p-12 rounded-[3.5rem] border border-slate-200 shadow-xl shadow-slate-200/20">
+                        <div className="flex items-center gap-4 mb-10">
+                            <h3 className="text-xl font-black text-rose-800 tracking-tight">Data Lock Controls</h3>
+                            <span className="px-3 py-1 bg-rose-50 text-rose-500 font-bold text-[10px] uppercase tracking-widest rounded-full">Audited Action</span>
+                        </div>
+                        
+                        <div className="space-y-4 max-w-sm">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Study Data Lock Status</label>
+                            <select 
+                                value={data.lock_status}
+                                onChange={e => setData('lock_status', e.target.value)}
+                                className={`w-full px-6 py-4 border rounded-2xl text-sm font-bold focus:outline-none focus:ring-4 transition-all cursor-pointer ${
+                                    data.lock_status === 'open' ? 'bg-emerald-50 text-emerald-800 border-emerald-200 focus:ring-emerald-100' :
+                                    data.lock_status === 'soft_lock' ? 'bg-amber-50 text-amber-800 border-amber-200 focus:ring-amber-100' :
+                                    'bg-rose-50 text-rose-800 border-rose-200 focus:ring-rose-100'
+                                }`}
+                            >
+                                <option value="open">Open (Data capture active)</option>
+                                <option value="soft_lock">Soft Lock (Queries only, no new data)</option>
+                                <option value="hard_lock">Hard Lock (Frozen, analytic state)</option>
+                            </select>
+                            <p className="text-[10px] text-slate-400 font-bold leading-relaxed px-2">Changing the lock status will enforce restrictions platform-wide. Unlocking will leave a critical alert in the audit trail.</p>
                         </div>
                     </div>
 

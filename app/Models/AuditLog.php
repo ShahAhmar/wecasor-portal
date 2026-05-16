@@ -16,11 +16,15 @@ class AuditLog extends Model
         'target_type',
         'target_id',
         'details',
+        'old_values',
+        'new_values',
         'ip_address',
     ];
 
     protected $casts = [
         'details' => 'array',
+        'old_values' => 'array',
+        'new_values' => 'array',
     ];
 
     public static function boot()

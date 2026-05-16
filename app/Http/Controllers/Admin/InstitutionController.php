@@ -14,7 +14,7 @@ class InstitutionController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:Administrator', except: ['index', 'show']),
+            new Middleware('role:Super Admin', except: ['index', 'show']),
         ];
     }
 
@@ -47,7 +47,7 @@ class InstitutionController extends Controller implements HasMiddleware
             'city' => 'nullable|string|max:100',
             'type' => 'required|string',
             'contact_person' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:institutions,email',
+            'email' => 'required|email|unique:sites,email',
             'phone' => 'nullable|string|max:20',
         ]);
 
@@ -71,7 +71,7 @@ class InstitutionController extends Controller implements HasMiddleware
             'city' => 'nullable|string|max:100',
             'type' => 'required|string',
             'contact_person' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:institutions,email,' . $institution->id,
+            'email' => 'required|email|unique:sites,email,' . $institution->id,
             'phone' => 'nullable|string|max:20',
         ]);
 
