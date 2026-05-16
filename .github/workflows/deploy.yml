@@ -41,7 +41,7 @@ jobs:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_PORT: 21098
           TARGET: ${{ secrets.SSH_TARGET }}
-          EXCLUDE: "/.git/, /.github/, /node_modules/, /tests/, /.env, /storage/*.key, /vendor/"
+          EXCLUDE: "/.git/, /.github/, /node_modules/, /tests/, /.env, /storage/*.key"
           ARGS: "-rlgoDzvc -i --delete"
           SCRIPT_AFTER: |
             echo "Deployment finished successfully!"
