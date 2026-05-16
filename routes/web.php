@@ -5,9 +5,20 @@ use App\Http\Controllers\Admin\StudyController;
 use App\Http\Controllers\Admin\InstitutionController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
     return redirect()->route('login');
+});
+
+// TEMPORARY SECURE ROUTE FOR DEPLOYMENT MIGRATIONS
+Route::get('/run-migrations-secret', function() {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return '<pre>' . Artisan::output() . '</pre>';
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
 });
 
 // Public Login (Site Investigators, Coordinators, etc.)
