@@ -17,9 +17,9 @@ class EnforceTwoFactor
         }
 
         // Mandatory roles for 2FA
-        $mandatoryRoles = ['Administrator', 'Governance Member'];
+        $mandatoryRoles = ['Administrator', 'Super Admin', 'Governance Member'];
 
-        if (in_array($user->role, $mandatoryRoles)) {
+        if (in_array($user->role, $mandatoryRoles) || $user->hasRole('Super Admin')) {
             // Check if 2FA is confirmed
             if (!$user->two_factor_confirmed_at) {
                 // If not confirmed, redirect to setup unless already on setup page
