@@ -101,8 +101,8 @@ export default function ConferenceHome({ language = 'en' }) {
 
             {/* Language Toggle & Top Bar */}
             <header className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100 transition-all">
-                <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-                    <img src="/images/wecasor-logo.png" alt="WeCASOR Logo" className="h-12 w-auto object-contain" />
+                <div className="container mx-auto px-6 h-24 flex items-center justify-between">
+                    <img src="/images/wecasor-logo.png" alt="WeCASOR Logo" className="h-16 md:h-[72px] w-auto object-contain" />
                     
                     <div className="flex items-center gap-4">
                         <div className="bg-slate-50 border border-slate-200 p-1 rounded-2xl flex gap-1 shadow-inner">
