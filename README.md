@@ -4,27 +4,27 @@ WeCASOR is a secure, state-of-the-art Clinical Trial Management and Research Por
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
-### 🛡️ Multi-Role Security & Data Isolation
+###  Multi-Role Security & Data Isolation
 - **Granular RBAC**: Implements Spatie Laravel Permission with dedicated scopes for *Super Admin, Country Lead, Site Coordinator, PI / Reviewer, and Auditor*.
 - **Row-Level Access Control**: Restricts document and subject view scopes based on user role and geographical location (e.g., Site Coordinators can only see their site; Country Leads see all sites in their country).
 
-### 🔒 Enterprise Protection & Compliance
+###  Enterprise Protection & Compliance
 - **Two-Factor Authentication (2FA)**: OTP-based 2FA with custom middleware safeguarding administrative endpoints.
 - **Audit Logging**: An automatic compliance logger recording all system activity, login states, document downloads, and metadata additions, tracking IP addresses and browser footprints.
 - **Secure Document Vault**: Private file disk architecture where resources are streamed on-the-fly through authorization filters rather than exposed in public folders.
 
-### 📊 eCRF & Study Workspaces
+###  eCRF & Study Workspaces
 - **Electronic Case Report Forms**: Custom data validation and submissions tracking Baseline, Discharge, and Follow-Up states for research subjects.
 - **Workspace Analytics**: Real-time enrollment visualizers, protocol checkers, and audit exports in CSV/Excel.
 
-### 🤖 AI Coordinator Assistant
+###  AI Coordinator Assistant
 - **LLM Agent Integration**: Built-in Groq Cloud API connector (`llama-3.3-70b-versatile`) serving as an on-demand AI workspace assistant, dynamically matching user role profiles and site data.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Backend**: Laravel 12.x (PHP 8.2+)
 - **Frontend**: React 18, Inertia.js, Tailwind CSS, Vite
@@ -36,7 +36,7 @@ WeCASOR is a secure, state-of-the-art Clinical Trial Management and Research Por
 
 ---
 
-## 📦 Installation & Setup
+##  Installation & Setup
 
 1. **Clone the repository:**
    ```bash
