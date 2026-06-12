@@ -1,8 +1,0 @@
-<?php
-$lines = file('storage/logs/laravel.log');
-foreach (array_reverse($lines) as $i => $line) {
-    if (strpos($line, 'local.ERROR') !== false) {
-        echo $line . "\n";
-        break;
-    }
-}

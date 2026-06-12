@@ -1,60 +1,73 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# WeCASOR Clinical Trial Research & Portal Hub
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+WeCASOR is a secure, state-of-the-art Clinical Trial Management and Research Portal built using **Laravel 12.0**, **Inertia.js**, and **React**. It streamlines clinical study operations, electronic Case Report Form (eCRF) submissions, multi-tenant site coordination, secure document distribution, and generative AI assistance for clinical coordinators.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Key Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🛡️ Multi-Role Security & Data Isolation
+- **Granular RBAC**: Implements Spatie Laravel Permission with dedicated scopes for *Super Admin, Country Lead, Site Coordinator, PI / Reviewer, and Auditor*.
+- **Row-Level Access Control**: Restricts document and subject view scopes based on user role and geographical location (e.g., Site Coordinators can only see their site; Country Leads see all sites in their country).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🔒 Enterprise Protection & Compliance
+- **Two-Factor Authentication (2FA)**: OTP-based 2FA with custom middleware safeguarding administrative endpoints.
+- **Audit Logging**: An automatic compliance logger recording all system activity, login states, document downloads, and metadata additions, tracking IP addresses and browser footprints.
+- **Secure Document Vault**: Private file disk architecture where resources are streamed on-the-fly through authorization filters rather than exposed in public folders.
 
-## Learning Laravel
+### 📊 eCRF & Study Workspaces
+- **Electronic Case Report Forms**: Custom data validation and submissions tracking Baseline, Discharge, and Follow-Up states for research subjects.
+- **Workspace Analytics**: Real-time enrollment visualizers, protocol checkers, and audit exports in CSV/Excel.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 🤖 AI Coordinator Assistant
+- **LLM Agent Integration**: Built-in Groq Cloud API connector (`llama-3.3-70b-versatile`) serving as an on-demand AI workspace assistant, dynamically matching user role profiles and site data.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🛠️ Tech Stack
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- **Backend**: Laravel 12.x (PHP 8.2+)
+- **Frontend**: React 18, Inertia.js, Tailwind CSS, Vite
+- **Database**: MySQL / PostgreSQL
+- **Key Packages**:
+  - `spatie/laravel-permission` (Role/Permission Engine)
+  - `inertiajs/inertia-laravel` (SPA Bridge)
+  - `laravel/sanctum` (API Authentication)
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 📦 Installation & Setup
 
-## Contributing
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/ShahAhmar/wecasor-portal.git
+   cd wecasor-portal
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. **Install Composer & NPM Dependencies:**
+   ```bash
+   composer install
+   npm install
+   ```
 
-## Code of Conduct
+3. **Configure Environment:**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+   *Note: Open `.env` and configure your database, mail server, and `GROQ_API_KEY` details.*
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. **Run Migrations & Seeders:**
+   ```bash
+   php artisan migrate --seed
+   php artisan storage:link
+   ```
 
-## Security Vulnerabilities
+5. **Start Dev Server:**
+   ```bash
+   # Terminal 1: Vite dev
+   npm run dev
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# wecasor-portal
+   # Terminal 2: PHP Artisan
+   php artisan serve
+   ```
